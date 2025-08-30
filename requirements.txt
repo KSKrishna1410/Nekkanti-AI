@@ -14,7 +14,6 @@ paramiko==3.3.1
 
 # OCR Dependencies for scanned PDF/image support
 paddleocr==3.0.0
-paddlepaddle==3.1.0
 pillow==10.1.0
 reportlab==4.0.7
 pymupdf==1.23.8
