@@ -163,6 +163,15 @@ class OCRProcessor:
         
         logger.info("✅ OCR Processor initialized successfully")
     
+    def cleanup(self):
+        """Clean up temporary files from all processors"""
+        try:
+            # Cleanup bank statement processor
+            if hasattr(self.bankstatement_processor, 'cleanup'):
+                self.bankstatement_processor.cleanup()
+        except Exception as e:
+            logger.warning(f"⚠️ Cleanup failed: {e}")
+    
     def process_document(self, file_content: bytes, filename: str, doctype: DocumentType) -> tuple:
         """Process document based on its type"""
         if doctype == DocumentType.INVOICE:
@@ -292,6 +301,9 @@ async def ocr_process_file(
         
         logger.info(f"✅ OCR processing completed successfully for {doctype}")
         logger.info(f"   - Token Usage: Input={token_usage.input_tokens}, Output={token_usage.output_tokens}, Cost=${token_usage.total_cost_usd:.4f}")
+        
+        # Clean up temporary files
+        processor.cleanup()
         
         return JSONResponse(
             status_code=200,
