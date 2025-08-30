@@ -82,6 +82,7 @@ Please extract the following information and return it as a JSON object with thi
         "buyer_address": "string or null",
         "invoice_number": "string or null",
         "invoice_date": "string or null",
+        "payment_terms": "string or null",
         "subtotal": "string or null",
         "total_tax": "string or null", 
         "total_amount": "string or null",
