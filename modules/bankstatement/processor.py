@@ -27,14 +27,26 @@ class BankStatementProcessor:
         self.output_dir = tempfile.mkdtemp(prefix="bankstmt_")
         self._temp_files_to_cleanup = []  # Track temp files for cleanup
         
+        # Create required subdirectories
+        self.headers_dir = os.path.join(self.output_dir, "headers")
+        self.tables_dir = os.path.join(self.output_dir, "tables")
+        self.images_dir = os.path.join(self.output_dir, "images")
+        
+        # Ensure all directories exist
+        os.makedirs(self.headers_dir, exist_ok=True)
+        os.makedirs(self.tables_dir, exist_ok=True)
+        os.makedirs(self.images_dir, exist_ok=True)
+        os.makedirs(os.path.join(self.tables_dir, "extracted_tables"), exist_ok=True)
+        os.makedirs(os.path.join(self.tables_dir, "extracted_tables", "images"), exist_ok=True)
+        
         # Initialize extractors
         self.table_extractor = DocumentTableExtractor(
-            output_dir=os.path.join(self.output_dir, "tables"),
+            output_dir=self.tables_dir,
             save_reconstructed_pdfs=True
         )
         
         self.header_extractor = BankStatementHeaderExtractor(
-            output_dir=os.path.join(self.output_dir, "headers"),
+            output_dir=self.headers_dir,
             keywords_csv="data/master_csv/bankstmt_allkeys.csv",
             ifsc_master_csv="data/master_csv/IFSC_master.csv"
         )
@@ -45,6 +57,22 @@ class BankStatementProcessor:
         
         logger.info("✅ Bank Statement Processor initialized with non-AI approach")
     
+    def _ensure_directories(self):
+        """Ensure all required directories exist - call before each processing"""
+        try:
+            os.makedirs(self.headers_dir, exist_ok=True)
+            os.makedirs(self.tables_dir, exist_ok=True) 
+            os.makedirs(self.images_dir, exist_ok=True)
+            os.makedirs(os.path.join(self.tables_dir, "extracted_tables"), exist_ok=True)
+            os.makedirs(os.path.join(self.tables_dir, "extracted_tables", "images"), exist_ok=True)
+            
+            # Also ensure OCR temp directory exists
+            ocr_temp_dir = "/tmp/ocr_temp"
+            os.makedirs(ocr_temp_dir, exist_ok=True)
+            
+        except Exception as e:
+            logger.warning(f"⚠️ Failed to create directories: {e}")
+    
     def cleanup(self):
         """Clean up temporary files and directories"""
         try:
@@ -54,11 +82,22 @@ class BankStatementProcessor:
                     os.unlink(temp_file)
                     logger.debug(f"🧹 Cleaned up temp file: {temp_file}")
             
-            # Clean up output directory
+            # Clean up output directory and all subdirectories
             if os.path.exists(self.output_dir):
                 import shutil
                 shutil.rmtree(self.output_dir)
                 logger.debug(f"🧹 Cleaned up temp directory: {self.output_dir}")
+            
+            # Also clean up any OCR temp directories in /tmp
+            try:
+                import glob
+                ocr_temp_dirs = glob.glob("/tmp/ocr_outputs_*")
+                for temp_dir in ocr_temp_dirs:
+                    if os.path.exists(temp_dir):
+                        shutil.rmtree(temp_dir)
+                        logger.debug(f"🧹 Cleaned up OCR temp dir: {temp_dir}")
+            except Exception as e:
+                logger.debug(f"Could not clean OCR temp dirs: {e}")
                 
             self._temp_files_to_cleanup.clear()
         except Exception as e:
@@ -70,6 +109,9 @@ class BankStatementProcessor:
         token_usage = TokenUsage()
         token_usage.provider = "non-ai"
         token_usage.model = "traditional-extraction"
+        
+        # Ensure all directories exist before processing
+        self._ensure_directories()
         
         # Create temporary file
         temp_file = None
