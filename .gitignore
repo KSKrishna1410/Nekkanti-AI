@@ -1,3 +1,6 @@
 .env
+*.pyc
+tmp*
 Dockerfile
-docker-compose.yml.env
+docker-compose.yml
+
