@@ -12,10 +12,13 @@ from enum import Enum
 
 import uvicorn
 import dotenv
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException, status
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException, status, Request
 from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from pydantic import BaseModel
 import click
+import re
 
 # Import modular components
 from modules.utils.sftp_client import SFTPClient
@@ -50,6 +53,99 @@ app = FastAPI(
     description="OCR processing endpoint for Invoice and Bank Statement documents with SFTP support",
     version="2.0.0"
 )
+
+# Middleware to fix Java client boundary format issues
+@app.middleware("http")
+async def debug_requests(request: Request, call_next):
+    # Fix Content-Type boundary format for Java client compatibility
+    if request.url.path == "/ocr_process/" and request.method == "POST":
+        content_type = request.headers.get("content-type", "")
+        if "multipart/form-data" in content_type and "boundary====" in content_type:
+            # Read the body first to modify it
+            body = await request.body()
+            
+            # Extract the original problematic boundary
+            boundary_match = re.search(r'boundary=(=+.*?=+)(?:;|$)', content_type)
+            if boundary_match:
+                original_boundary = boundary_match.group(1)
+                # Create a clean boundary (just the middle numeric part)
+                clean_boundary_match = re.search(r'=*(\d+)=*', original_boundary)
+                if clean_boundary_match:
+                    clean_boundary = f"boundary{clean_boundary_match.group(1)}"
+                    
+                    # Fix the Content-Type header
+                    new_content_type = f"multipart/form-data; boundary={clean_boundary}"
+                    
+                    # Fix the body by replacing boundary markers (binary-safe)
+                    # Replace --===NUMERIC=== with --boundaryNUMERIC
+                    old_boundary_marker = f"--{original_boundary}".encode('utf-8')
+                    new_boundary_marker = f"--{clean_boundary}".encode('utf-8')
+                    fixed_body = body.replace(old_boundary_marker, new_boundary_marker)
+                    
+                    # Also fix the ending boundary marker
+                    old_end_marker = f"--{original_boundary}--".encode('utf-8')
+                    new_end_marker = f"--{clean_boundary}--".encode('utf-8')
+                    fixed_body = fixed_body.replace(old_end_marker, new_end_marker)
+                    
+                    # Update headers
+                    fixed_headers = []
+                    for name_bytes, value_bytes in request.scope["headers"]:
+                        name = name_bytes.decode()
+                        if name.lower() == "content-type":
+                            fixed_headers.append((b"content-type", new_content_type.encode()))
+                        elif name.lower() == "content-length":
+                            fixed_headers.append((b"content-length", str(len(fixed_body)).encode()))
+                        else:
+                            fixed_headers.append((name_bytes, value_bytes))
+                    
+                    request.scope["headers"] = fixed_headers
+                    
+                    # Create a new receive callable with the fixed body
+                    async def receive():
+                        return {"type": "http.request", "body": fixed_body}
+                    
+                    request._receive = receive
+                    
+                    # Continue processing with fixed request
+                    response = await call_next(request)
+                    return response
+    
+    # For non-OCR requests or requests that don't need fixing, use original flow
+    body = await request.body()
+    
+    # Create a new request with the body for the endpoint to use
+    async def receive():
+        return {"type": "http.request", "body": body}
+    
+    request._receive = receive
+    
+    # Continue to the actual endpoint
+    response = await call_next(request)
+    return response
+
+# Add exception handler for all HTTP exceptions
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail}
+    )
+
+# Add general exception handler for any unhandled exceptions
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error"}
+    )
+
+# Add exception handler for validation errors
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return JSONResponse(
+        status_code=422,
+        content={"detail": exc.errors()}
+    )
 
 class OCRProcessor:
     def __init__(self):
@@ -215,6 +311,11 @@ async def ocr_process_file(
 async def health_check():
     """Health check endpoint"""
     return {"status": "healthy", "service": "ocr-processing-api", "version": "2.0.0"}
+
+@app.get("/test")
+async def test_endpoint():
+    """Test endpoint for quick verification"""
+    return {"status": "OK", "message": "OCR API is running", "version": "2.0.0"}
 
 @app.get("/")
 async def root():
