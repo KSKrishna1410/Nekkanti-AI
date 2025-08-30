@@ -1,0 +1,486 @@
+"field_name","key","data_type","field_type"
+Due Date,Due Date,Date,Header
+Invoice Date,Date,Date,Header
+Invoice Date,Dated,Date,Header
+Invoice Date,E-Invoice Ack.Date,Date,Header
+Invoice Date,Order Date,Date,Header
+Invoice Date,Invoice Date:,Date,Header
+Invoice Date,Invoice Date,Date,Header
+Invoice Date,BILL DATE,Date,Header
+Invoice Date,Date of Invoice,Date,Header
+Invoice Date,Date of Invoice:,Date,Header
+Invoice Date,Invoice date,Date,Header
+Invoice Date,Time,Date,Header
+Invoice Date,BILLDATE,Date,Header
+Invoice Date,Sale Date,Date,Header
+Invoice Date,Document Date,Date,Header
+Invoice Date,Date:,Date,Header
+CGST Tax Amount,CGST9 (9%),Double,Header
+CGST Tax Amount,Add:CGST,Double,Header
+CGST Tax Amount,CGST9%,Double,Header
+CGST Tax Amount,CGST,Double,Header
+CGST Tax Amount,CGST Amt,Double,Header
+CGST Tax Amount,CGST(9%),Double,Header
+CGST Tax Amount,CGST Amount,Double,Header
+CGST Tax Amount,Total CGST,Double,Header
+CGST Tax Amount,ADD:CGST @ 9%,Double,Header
+CGST Tax Amount,CGST @ 9%,Double,Header
+CGST Tax Amount,"9%",Double,Header
+CGST Tax Amount,CGST 9%,Double,Header
+CGST Tax Amount,CGST 2.5%,Double,Header
+CGST Tax Amount,AOD:CGST @ 9%,Double,Header
+CGST Tax Rate,CGST%,Double,Header
+CGST Tax Rate,CGST %,Double,Header
+CGST Tax Rate,CG ST%,Double,Header
+Discount,Discount/Margin*,Double,Header
+Discount,DISCOUNT,Double,Header
+Discount,Savings (Rs),Double,Header
+Discount,Discount/ Margin*,Double,Header
+Discount,Total Savings,Double,Header
+Discount,DISCOUNT(),Double,Header
+Discount,Disc. %,Double,Header
+Discount,Disc.,Double,Header
+Discount,Qty(Disc),Double,Header
+Discount,(15%),Double,Header
+Freight,Freight,Double,Header
+IGST Tax Amount,IGST charged at 18%,Double,Header
+IGST Tax Amount,IGST %,Double,Header
+IGST Tax Amount,IGST 0%,Double,Header
+IGST Tax Amount,IGST Amount/IGST Output @ 18%,Double,Header
+IGST Tax Amount,Integrated GST (18%),Double,Header
+IGST Tax Amount,IGST5.0,Double,Header
+IGST Tax Amount,Taxes: IGST @ 18%,Double,Header
+IGST Tax Amount,IGST Amount,Double,Header
+IGST Tax Amount,IGST Rate Amount,Double,Header
+IGST Tax Amount,@12%,Double,Header
+IGST Tax Amount,IGST @ 18%,Double,Header
+IGST Tax Amount,Total Tax Amount,Double,Header
+IGST Tax Amount,"12%",Double,Header
+IGST Tax Amount,IGST,Double,Header
+IGST Tax Rate,IGST OUTPUT @ 18%,Double,Header
+IGST Tax Rate,GST %,Double,Header
+Invoice Total Amount,per,Double,Header
+Invoice Total Amount,Totals,Double,Header
+Invoice Total Amount,Balance Due,Double,Header
+Invoice Total Amount,Invoice Value,Double,Header
+Invoice Total Amount,Net Payable,Double,Header
+Invoice Total Amount,Total,Double,Header
+Invoice Total Amount,Total:,Double,Header
+Invoice Total Amount,Total Invoice Value (in figure) ,Double,Header
+Invoice Total Amount,NETT AMOUNT (Rounded),Double,Header
+Invoice Total Amount,Total Invoice Value,Double,Header
+Invoice Total Amount,Total in INR,Double,Header
+Invoice Total Amount,Grand Total(incl. of taxes),Double,Header
+Invoice Total Amount,Grand Total,Double,Header
+Invoice Total Amount,Amount Rs.,Double,Header
+Invoice Total Amount,Total Value,Double,Header
+Invoice Total Amount,Total Invoice Value (rounded off),Double,Header
+Invoice Total Amount,Rs.,Double,Header
+Invoice Total Amount,Amount,Double,Header
+Invoice Total Amount,Total Amount,Double,Header
+Invoice Total Amount,Net Amount,Double,Header
+Invoice Total Amount,Total Invoice Value (rounded off) ,Double,Header
+Invoice Total Amount,Current Total,Double,Header
+Invoice Total Amount,TOTAL RECEIVED AMOUNT,Double,Header
+Invoice Total Amount,Invoice Total Amount,Double,Header
+Invoice Total Amount,Invoice Total,Double,Header
+Invoice Total Amount,Item Total,Double,Header
+Invoice Total Amount,GRAND TOTAL,Double,Header
+Invoice Total Amount,Gross Amount/Total Invoice Value,Double,Header
+Invoice Total Amount,Total Invoice Amount,Double,Header
+Net Amount,Gross,Double,Header
+Net Amount,Total Amount(+),Double,Header
+Net Amount,Amount(Rs.),Double,Header
+Net Amount,Total Taxable Value,Double,Header
+Net Amount,Subtotal in INR,Double,Header
+Net Amount,Amount,Double,Header
+Net Amount,Total Amount Before Tax,Double,Header
+Net Amount,Taxable Amount,Double,Header
+Net Amount,Net Amount,Double,Header
+Net Amount,Total MRP Value,Double,Header
+Net Amount,Total Charges,Double,Header
+Net Amount,Sub Total,Double,Header
+Net Amount,Total Amt,Double,Header
+Net Amount,Tax'ble Amt,Double,Header
+Net Amount,AMT,Double,Header
+Net Amount,Total MRP,Double,Header
+Net Amount,Taxable ,Double,Header
+Net Amount,Item Total,Double,Header
+Net Amount,Total,Double,Header
+Net Amount,MRP (Rs) CGST,Double,Header
+Net Amount,Amount Rs.,Double,Header
+Net Amount,Taxable Value,Double,Header
+Net Amount,Subtotal,Double,Header
+SGST Tax Amount,Total SGST,Double,Header
+SGST Tax Amount,SGST(9%),Double,Header
+SGST Tax Amount,SGST 9%,Double,Header
+SGST Tax Amount,SGST,Double,Header
+SGST Tax Amount,SGST9%,Double,Header
+SGST Tax Amount,SCGT Amount,Double,Header
+SGST Tax Amount,SGST Amount,Double,Header
+SGST Tax Amount,SGST/UTGST 2.5%,Double,Header
+SGST Tax Amount,Sgst @6%,Double,Header
+SGST Tax Amount,SGST9 (9%),Double,Header
+SGST Tax Amount,"9%",Double,Header
+SGST Tax Amount,Sgst @14%,Double,Header
+SGST Tax Amount,Sgst @2.5%,Double,Header
+SGST Tax Amount,SGST @ 9%,Double,Header
+SGST Tax Amount,SGST Amt,Double,Header
+SGST Tax Amount,ADD:SGST @ 9%,Double,Header
+SGST Tax Amount,Add:SGST,Double,Header
+SGST Tax Rate,SG ST%,Double,Header
+SGST Tax Rate,SGST% ****,Double,Header
+SGST Tax Rate,SGST %,Double,Header
+Total Tax Amount,Total taxes,Double,Header
+Total Tax Amount,TaxAmt,Double,Header
+Total Tax Amount,Total Tax,Double,Header
+Total Tax Amount,Tax Amount,Double,Header
+Total Tax Amount,Tax Total,Double,Header
+CIN Number,CIN,String,Header
+GSTIN,GSTIN No & Address:,String,Header
+GSTIN,GSTN No,String,Header
+GSTIN,Registration Number,String,Header
+GSTIN,GSTIN Number,String,Header
+GSTIN,GSTIN :-,String,Header
+GSTIN,GSTNo,String,Header
+GSTIN,GSTIN No,String,Header
+GSTIN,GSTN No :,String,Header
+GSTIN,GSTIN,String,Header
+GSTIN,GSTIN :,String,Header
+GSTIN,GSTN Numbe,String,Header
+GSTIN,GST No.,String,Header
+GSTIN,GST no of provider,String,Header
+GSTIN,GST Registration No,String,Header
+GSTIN,GST|N/U|N,String,Header
+GSTIN,GST,String,Header
+GSTIN,GST Tin,String,Header
+GSTIN,GSTN Number,String,Header
+GSTIN,GSTIN/UIN,String,Header
+GSTIN,GST No,String,Header
+GSTIN,GSTIN No.,String,Header
+GSTIN,Restaurant GSTIN,String,Header
+HSN,HSN/SAC,String,Header
+HSN,HSN/ SAC,String,Header
+HSN,and SAC code,String,Header
+HSN,SAC Code,String,Header
+HSN,HSN Code,String,Header
+HSN,HSN Code:,String,Header
+HSN,/SAC,String,Header
+HSN,HSN,String,Header
+Invoice Number,Inv. No.,String,Header
+Invoice Number,Invoice:#,String,Header
+Invoice Number,Invoice Number #,String,Header
+Invoice Number,"lnvoice No,",String,Header
+Invoice Number,No.,String,Header
+Invoice Number,Invoice ID,String,Header
+Invoice Number,Invoice Number#,String,Header
+Invoice Number,Invoice #,String,Header
+Invoice Number,Invoice #:,String,Header
+Invoice Number,Invoice Serial Number,String,Header
+Invoice Number,TAX INVOICE,String,Header
+Invoice Number,Invoice No,String,Header
+Invoice Number,Invoice#,String,Header
+Invoice Number,Invoice#:,String,Header
+Invoice Number,Tax Invoice No,String,Header
+Invoice Number,Invoice No:,String,Header
+Invoice Number,Document No,String,Header
+Invoice Number,Order #,String,Header
+Invoice Number,Bill No .,String,Header
+Invoice Number,Inv No,String,Header
+Invoice Number,Invoice No.,String,Header
+Invoice Number,Invoice number,String,Header
+Invoice Number,Invoice Number,String,Header
+Invoice Number,Serial Invoice No,String,Header
+Invoice Number,GST Invoice No.,String,Header
+Invoice Number,Bill No,String,Header
+Invoice Number,Document No.,String,Header
+Invoice Number,Bill No.,String,Header
+Invoice Number,OrderID / Bill No.,String,Header
+Invoice Number,Number,String,Header
+Invoice Number,I Invoice No.,String,Header
+Invoice Number,Order No:,String,Header
+Invoice Number,ORDER NUMBER:,String,Header
+Invoice Number,Invoice,String,Header
+IRN No,IRN,String,Header
+IRN No,IRN No,String,Header
+IRN No,E-Invoice IRN No.,String,Header
+PAN Number,PAN Number,String,Header
+PAN Number,PAN,String,Header
+PAN Number,Company's PAN,String,Header
+PAN Number,PAN No,String,Header
+PAN Number,PAN no.,String,Header
+Payment Status,Paid Via Other,String,Header
+Payment Status,Amount Paid,String,Header
+Payment Status,Amount Paid:,String,Header
+Payment Status,UPI Payment,String,Header
+Payment Status,CASH PAID,String,Header
+Payment Status,Amount Received From Customer,String,Header
+Payment Status,Paid,String,Header
+Payment Status,Paid Via Card,String,Header
+Payment Status,PaymentMode (Amount),String,Header
+Payment Status,PAID,String,Header
+Payment Status,CREDIT CARD,String,Header
+Payment Status,Payment Method,String,Header
+Payment Status,Payment Method:,String,Header
+Payment Status,TOTAL RECEIVED AMOUNT,String,Header
+Payment Status,Mode of Payment,String,Header
+Payment Status,Payment Transaction ID:,String,Header
+PO No#,Order,String,Header
+PO No#,Pur.Ord.No & Date/,String,Header
+PO No#,Order Number,String,Header
+PO No#,P.O. Number,String,Header
+PO No#,Party's PO No/Date,String,Header
+PO No#,Order No,String,Header
+PO No#,Dunzo Order:,String,Header
+Supplier Details,Billing /Supplier Information,String,Header
+Supplier Details,Supply Address,String,Header
+Supplier Details,Dispatch From,String,Header
+Supplier Details,Sold By,String,Header
+Supplier Details,Sold By / Seller,String,Header
+Supplier Details,Details Of Supplier,String,Header
+Supplier Details,Restaurant Address,String,Header
+Supplier Details,Seller Details,String,Header
+Supplier Details,Ship Address,String,Header
+Supplier Name,Seller Details,String,Header
+Supplier Name,Sold By / Seller,String,Header
+Supplier Name,Restaurant Name,String,Header
+Supplier Name,Business Name,String,Header
+Supplier Name,Sold By,String,Header
+Supplier Name,Supply Address,String,Header
+Amount,Amount(₹),Double,Line
+Amount,CGST,Double,Line
+Amount,Amt,Double,Line
+Amount,Total Amount,Double,Line
+Amount,AMOUNT (₹),Double,Line
+Amount,Net Charges,Double,Line
+Amount,SGST,Double,Line
+Amount,Amount in Rs.,Double,Line
+Amount,Bill Amount,Double,Line
+Amount,Net Assessable Value(Rs.),Double,Line
+Amount,Total Amt,Double,Line
+Amount,Amount Rs.,Double,Line
+CGST Tax Amount,AOD:CGST @ 9%,Double,Line
+CGST Tax Amount,CGST(9%),Double,Line
+CGST Tax Amount,CGST Amt,Double,Line
+CGST Tax Amount,"9%",Double,Line
+CGST Tax Amount,CGST 2.5%,Double,Line
+CGST Tax Amount,Total CGST,Double,Line
+CGST Tax Amount,CGST val,Double,Line
+CGST Tax Amount,cgst (INR),Double,Line
+CGST Tax Amount,CGST (INR),Double,Line
+CGST Tax Amount,COST,Double,Line
+CGST Tax Amount,ADD:CGST @ 9%,Double,Line
+CGST Tax Amount,CGST @ 9%,Double,Line
+CGST Tax Amount,Add:CGST,Double,Line
+CGST Tax Amount,CGST 9%,Double,Line
+CGST Tax Amount,CGST,Double,Line
+CGST Tax Amount,CGST Amount,Double,Line
+CGST Tax Amount,CGST9 (9%),Double,Line
+CGST Tax Rate,CG ST%,Double,Line
+CGST Tax Rate,CGST %,Double,Line
+CGST Tax Rate,cgst %,Double,Line
+CGST Tax Rate,CGST (Rate),Double,Line
+CGST Tax Rate,CgST,Double,Line
+CGST Tax Rate,cgst (Rate),Double,Line
+CGST Tax Rate,CGST(%),Double,Line
+CGST Tax Rate,CGST%,Double,Line
+Discount,Disc.,Double,Line
+Discount,Discount/ Margin*,Double,Line
+Discount,Savings (Rs),Double,Line
+Discount,Qty(Disc),Double,Line
+Discount,DISCOUNT(),Double,Line
+Discount,Total Savings,Double,Line
+Discount,(15%),Double,Line
+Discount,DISCOUNT,Double,Line
+Discount,Disc. %,Double,Line
+Discount,Discount/Margin*,Double,Line
+IGST Tax Amount,IGST charged at 18%,Double,Line
+IGST Tax Amount,IGST Amount,Double,Line
+IGST Tax Amount,Integrated GST (18%),Double,Line
+IGST Tax Amount,IGST Rate Amount,Double,Line
+IGST Tax Amount,IGST Amount/IGST Output @ 18%,Double,Line
+IGST Tax Amount,Taxes: IGST @ 18%,Double,Line
+IGST Tax Amount,IGST @ 18%,Double,Line
+IGST Tax Amount,IGST %,Double,Line
+IGST Tax Amount,Total Tax Amount,Double,Line
+IGST Tax Amount,Amt,Double,Line
+IGST Tax Amount,IGST 0%,Double,Line
+IGST Tax Amount,"12%",Double,Line
+IGST Tax Amount,IGST,Double,Line
+IGST Tax Rate,GST %,Double,Line
+IGST Tax Rate,IGST OUTPUT @ 18%,Double,Line
+Line Net Amount,Gross value,Double,Line
+Line Net Amount,Taxable Amount,Double,Line
+Line Net Amount,Taxable,Double,Line
+Line Net Amount,Gross,Double,Line
+Line Net Amount,AMOUNT (₹),Double,Line
+Line Net Amount,Amount(₹),Double,Line
+Line Net Amount,Amount,Double,Line
+Line Net Amount,Taxable Vaue,Double,Line
+Line Net Amount,Amount Total,Double,Line
+Line Net Amount,Taxable Amount(Rs),Double,Line
+Line Net Amount,Amount(Rs.),Double,Line
+Line Net Amount,Rate,Double,Line
+Line Net Amount,AMOUNT (),Double,Line
+Line Net Amount,Taxable Value,Double,Line
+Line Net Amount,Net Charges,Double,Line
+Line Tax amt,Tax Amount,Double,Line
+Line Tax amt,Total Tax Amount,Double,Line
+SGST Tax Amount,ADD:SGST @ 9%,Double,Line
+SGST Tax Amount,SGST/UTGST 2.5%,Double,Line
+SGST Tax Amount,SGST(9%),Double,Line
+SGST Tax Amount,SGST 9%,Double,Line
+SGST Tax Amount,Amt,Double,Line
+SGST Tax Amount,SGST9 (9%),Double,Line
+SGST Tax Amount,Sgst @2.5%,Double,Line
+SGST Tax Amount,Total SGST,Double,Line
+SGST Tax Amount,Add:SGST,Double,Line
+SGST Tax Amount,SGST @ 9%,Double,Line
+SGST Tax Amount,SOST,Double,Line
+SGST Tax Amount,SGST Amt,Double,Line
+SGST Tax Amount,SGST (INR),Double,Line
+SGST Tax Amount,Sgst @14%,Double,Line
+SGST Tax Amount,Sgst @6%,Double,Line
+SGST Tax Amount,sgst (INR),Double,Line
+SGST Tax Amount,SGST,Double,Line
+SGST Tax Amount,SGST Amount,Double,Line
+SGST Tax Amount,SGST val,Double,Line
+SGST Tax Amount,SCGT Amount,Double,Line
+SGST Tax Rate,SG ST%,Double,Line
+SGST Tax Rate,SGST,Double,Line
+SGST Tax Rate,SGST (%),Double,Line
+SGST Tax Rate,sgst (Rate),Double,Line
+SGST Tax Rate,SGST %,Double,Line
+SGST Tax Rate,SGST% ****,Double,Line
+SGST Tax Rate,SGST (Rate),Double,Line
+Unit Price,Gross value,Double,Line
+Unit Price,Unit Price(Rs),Double,Line
+Unit Price,Unit Price,Double,Line
+Unit Price,Gross Amount,Double,Line
+Unit Price,Unit Price incl. Tax,Double,Line
+Unit Price,Rate/ Item,Double,Line
+Unit Price,Price,Double,Line
+Unit Price,PRICE (),Double,Line
+Unit Price,PRICE (₹),Double,Line
+Unit Price,UNIT PRICE,Double,Line
+Unit Price,Net value,Double,Line
+Unit Price,Unit Rate,Double,Line
+Unit Price,Rate lncl.ofTax,Double,Line
+Unit Price,"RATE
+(Rs.)",Double,Line
+Unit Price,Rate,Double,Line
+Unit Price,Unit Rate Rate,Double,Line
+Unit Price,RATE (Rs.),Double,Line
+Unit Price,Rate/Item,Double,Line
+Unit Price,Product Rate,Double,Line
+Line Tax Percentage,%,Percent,Line
+Line Tax Percentage,IG ST%,Percent,Line
+Line Tax Percentage,Tax Rate,Percent,Line
+Line Tax Percentage,SG ST%,Percent,Line
+Line Tax Percentage,Rate,Percent,Line
+Line Tax Percentage,CG ST%,Percent,Line
+Description,Month,String,Line
+Description,Description,String,Line
+Description,Description Of Goods (Mfg Mkt),String,Line
+Description,Froduct Nane,String,Line
+Description,Description of Service,String,Line
+Description,Description of Goods.,String,Line
+Description,Description of Goods. Froduct Nane,String,Line
+Description,SI Description of Goods No,String,Line
+Description,ITEM NAME,String,Line
+Description,Item Description,String,Line
+Description,Service Description,String,Line
+Description,Name of the Product,String,Line
+Description,HSN Code and Description,String,Line
+Description,SI Description of Goods No.,String,Line
+Description,Package,String,Line
+Description,Description of Goods,String,Line
+Description,Product Description,String,Line
+Description,Description of,String,Line
+Description,Description Of Services,String,Line
+Description,Description/ ISN/UOM City,String,Line
+Description,ITEM(S) PURCHASED,String,Line
+Description,Desc of Goods,String,Line
+Description,Item Details,String,Line
+Description,Particulars,String,Line
+Description,ITEM,String,Line
+Description,Item & Description,String,Line
+Line HSN,HSN,String,Line
+Line HSN,HSN/ SAC,String,Line
+Line HSN,SAC Code,String,Line
+Line HSN,and SAC code,String,Line
+Line HSN,/SAC,String,Line
+Line HSN,P9/9AC,String,Line
+Line HSN,HSN/SAC,String,Line
+Line HSN,HSN Code,String,Line
+Quantity,QTV,String,Line
+Quantity,Item Qty,String,Line
+Quantity,Qty Kgs.,String,Line
+Quantity,Qty,String,Line
+Quantity,Quantity,String,Line
+Quantity,Quantity/ UoM,String,Line
+Quantity,Quantity Qty,String,Line
+Quantity,QTY,String,Line
+Quantity,Description/ ISN/UOM City,String,Line
+Others,Item(s) Total,String,Others
+Others,Declaration,String,Others
+Others,e-Way Bill No.Dated,String,Others
+Others,Reference,String,Others
+Others,"Bill To,",String,Others
+Others,Customer A ddress:,String,Others
+Others,SGST/UTGST,String,Others
+Others,Due Date:,String,Others
+Others,Place of Supply:,String,Others
+Others,Tax,String,Others
+Others,(Rate),String,Others
+Others,Candidates,String,Others
+Others,(INR),String,Others
+Others,Delivery Note,String,Others
+Others,Quantity,String,Others
+Others,Round Off,String,Others
+Others,Rate,String,Others
+table_end_position,Total,String,Others
+table_end_position,grand total,String,Others
+table_end_position,Gross Amount/Total,String,Others
+table_end_position,Taxable Amount,String,Others
+table_end_position,Gross Amount,String,Others
+table_end_position,RUPEES IN WORDS:,String,Others
+table_end_position,Amount Chargeable,String,Others
+table_end_position,Current Total,String,Others
+table_end_position,invoice total,String,Others
+table_end_position,Item Total,String,Others
+table_end_position,Tax Summary,String,Others
+table_end_position,Sub Total,String,Others
+table_end_position,Total value,String,Others
+table_end_position,Totals,String,Others
+table_end_position,amount in words,String,Others
+table_end_position,Round Off,String,Others
+table_start_position,items,String,Others
+table_start_position,Candidates,String,Others
+table_start_position,purchased,String,Others
+table_start_position,value,String,Others
+table_start_position,discount,String,Others
+table_start_position,Particulars,String,Others
+table_start_position,Package,String,Others
+table_start_position,item,String,Others
+table_start_position,description,String,Others
+table_start_position,descriptions,String,Others
+table_start_position,qty,String,Others
+table_start_position,rate,String,Others
+table_start_position,quantity,String,Others
+table_start_position,amount,String,Others
+table_start_position,hsn,String,Others
+table_start_position,price,String,Others
+table_start_position,net charges,String,Others
+table_start_position,CGST,String,Others
+table_start_position,SGST,String,Others
+table_start_position,SGST/,String,Others
+table_start_position,(Rs.),String,Others
+table_start_position,Amt,String,Others
+table_start_position,sr,String,Others
+table_start_position,(Rate),String,Others
+table_start_position,Taxable,String,Others
+table_start_position,Cess,String,Others
+table_start_position,tax,String,Others
+table_start_position,Code,String,Others
+table_start_position,HSN Code and Description,String,Others

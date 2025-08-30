@@ -14,7 +14,7 @@ project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(_
 sys.path.append(project_root)
 
 from bank_statements.extractors.header_extractor import BankStatementHeaderExtractor
-from bank_statements.extractors.bank_statement_extractor import BankStatementExtractor
+from bank_statements.extractors.table_extractor import BankStatementExtractor
 from utils.extraction.table_extractor import DocumentTableExtractor
 from ..utils.ai_provider import TokenUsage
 
