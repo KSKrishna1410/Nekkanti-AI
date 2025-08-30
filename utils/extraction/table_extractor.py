@@ -361,6 +361,8 @@ class DocumentTableExtractor:
         elif base_name.endswith("_reconstructed"):
             base_name = base_name[:-14]
         
+        # Ensure the extracted tables directory exists
+        os.makedirs(self.extracted_tables_dir, exist_ok=True)
         output_path = os.path.join(self.extracted_tables_dir, f"{base_name}.xlsx")
 
         try:

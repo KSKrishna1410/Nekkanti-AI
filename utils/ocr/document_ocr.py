@@ -199,9 +199,11 @@ class DocumentOCR:
         """Convert PDF pages to temporary image files."""
         import fitz  # Make sure we have the right import
         
-        # Ensure the output directory exists with proper permissions
+        # Ensure all required directories exist with proper permissions
         os.makedirs(self.output_dir, exist_ok=True)
+        os.makedirs(self.temp_images_dir, exist_ok=True)
         print(f"📁 Using OCR output directory: {self.output_dir}")
+        print(f"📁 Using temp images directory: {self.temp_images_dir}")
         
         try:
             doc = fitz.open(pdf_path)
@@ -219,6 +221,9 @@ class DocumentOCR:
                     
                     # Create temporary image path
                     temp_image_path = os.path.join(self.temp_images_dir, f"{base_name}_temp_page{page_num + 1}.png")
+                    
+                    # Ensure parent directory exists before saving
+                    os.makedirs(os.path.dirname(temp_image_path), exist_ok=True)
                     
                     # Save the image
                     pix.save(temp_image_path)
