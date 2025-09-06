@@ -21,6 +21,16 @@ class TokenUsage:
         self.provider: str = ""
         self.model: str = ""
 
+    def accumulate(self, other_usage: 'TokenUsage'):
+        """Accumulate token usage from another TokenUsage object."""
+        self.input_tokens += other_usage.input_tokens
+        self.output_tokens += other_usage.output_tokens
+        self.total_cost_usd += other_usage.total_cost_usd
+        if not self.provider:
+            self.provider = other_usage.provider
+        if not self.model:
+            self.model = other_usage.model
+
 
 class AIProviderClient:
     def __init__(self):

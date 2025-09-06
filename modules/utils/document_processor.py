@@ -26,60 +26,50 @@ class DocumentProcessor:
             logger.warning(f"⚠️ OCR processor initialization failed: {e}")
             logger.warning("Will only support readable PDFs")
     
-    def extract_text_from_pdf(self, pdf_content: bytes, filename: str = "document.pdf") -> str:
-        """Extract text content from PDF using PyPDF2 or OCR for scanned documents"""
+    def extract_text_from_pdf(self, pdf_content: bytes, filename: str = "document.pdf") -> List[str]:
+        """Extract text content from PDF, returning a list of strings per page."""
         try:
-            # First try extracting text directly from PDF
             pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_content))
-            text = ""
-            for page in pdf_reader.pages:
-                text += page.extract_text() + "\n"
+            page_texts = [page.extract_text() for page in pdf_reader.pages]
             
-            # Check if extracted text is meaningful (not a scanned PDF)
-            if len(text.strip()) > 100:  # Readable PDF
-                logger.info("✅ Readable PDF detected, using direct text extraction")
-                return text.strip()
+            # Check if extracted text is meaningful
+            if sum(len(t.strip()) for t in page_texts) > 100:
+                logger.info(f"✅ Readable PDF detected with {len(page_texts)} pages, using direct text extraction")
+                return page_texts
             else:
-                # Scanned PDF - use OCR
                 logger.info("📸 Scanned PDF detected, using OCR extraction")
                 return self._extract_text_with_ocr(pdf_content, filename)
                 
         except Exception as e:
-            # Fallback to OCR if direct extraction fails
             logger.warning(f"Direct text extraction failed: {e}")
             logger.info("🔄 Falling back to OCR extraction")
             return self._extract_text_with_ocr(pdf_content, filename)
-    
-    def extract_text_from_image(self, image_content: bytes, filename: str) -> str:
-        """Extract text from image using OCR"""
+
+    def extract_text_from_image(self, image_content: bytes, filename: str) -> List[str]:
+        """Extract text from a single image, returning a list with one string."""
         return self._extract_text_with_ocr(image_content, filename)
-    
-    def _extract_text_with_ocr(self, content: bytes, filename: str) -> str:
-        """Extract text using OCR for scanned documents and images"""
+
+    def _extract_text_with_ocr(self, content: bytes, filename: str) -> List[str]:
+        """Extract text using OCR, returning a list of strings per page."""
         if not self.ocr_processor:
             raise ValueError("OCR processor not available. Cannot process scanned documents.")
         
-        # Create temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(filename)[1]) as temp_file:
             temp_file.write(content)
             temp_file.flush()
             temp_path = temp_file.name
         
         try:
-            # Use OCR to extract text
-            ocr_results, reconstructed_pdf_path = self.ocr_processor.ocr_and_reconstruct(temp_path)
+            ocr_results, _ = self.ocr_processor.ocr_and_reconstruct(temp_path)
+            page_texts = self.ocr_processor.extract_text_per_page(ocr_results)
             
-            # Extract text with page information for better LLM context
-            extracted_text = self.ocr_processor.extract_text_with_page_info(ocr_results)
-            
-            if not extracted_text.strip():
+            if not any(page.strip() for page in page_texts):
                 raise ValueError("No text could be extracted from the document")
-            
-            logger.info(f"✅ OCR extracted {len(text_parts)} text segments")
-            return extracted_text
+
+            logger.info(f"✅ OCR extracted text from {len(page_texts)} pages")
+            return page_texts
             
         finally:
-            # Clean up temporary file
             try:
                 os.unlink(temp_path)
             except Exception as e:

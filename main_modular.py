@@ -208,92 +208,69 @@ async def ocr_process_file(
     Includes detailed debugging for troubleshooting client requests.
     """
     
-    # Log request details for debugging
     logger.info(f"🔍 OCR Processing Request:")
-    logger.info(f"   - File: {file.filename}")
-    logger.info(f"   - Content Type: {file.content_type}")
-    logger.info(f"   - Output Dir: {output_dir}")
-    logger.info(f"   - Document Type: {doctype}")
-    
-    # Check supported file types
+    logger.info(f"   - File: {file.filename}, Content-Type: {file.content_type}")
+    logger.info(f"   - Output Dir: {output_dir}, Document Type: {doctype}")
+
     is_supported, file_type = processor.document_processor.is_supported_file_type(file.filename)
     if not is_supported:
-        allowed_extensions = ['.pdf', '.png', '.jpg', '.jpeg', '.bmp', '.tiff', '.tif']
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Unsupported file type. Supported formats: {', '.join(allowed_extensions)}"
+            detail=f"Unsupported file type. Supported formats: .pdf, .png, .jpg, .jpeg, .bmp, .tiff, .tif"
         )
     
     try:
-        # Generate process ID (UUID)
         process_id = str(uuid.uuid4())
         logger.info(f"📋 Generated Process ID: {process_id}")
         
-        # Read file content
         file_content = await file.read()
         if not file_content:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Empty file uploaded"
-            )
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Empty file uploaded")
         
         logger.info(f"📄 File size: {len(file_content)} bytes")
         
-        # Upload file to SFTP if available
-        sftp_file_path = None
-        sftp_file_dir = None
+        sftp_file_path, sftp_file_dir = None, None
         if processor.sftp_client:
             try:
-                sftp_file_path, sftp_file_dir = processor.sftp_client.upload_file(
-                    file_content, file.filename, process_id
-                )
+                sftp_file_path, sftp_file_dir = processor.sftp_client.upload_file(file_content, file.filename, process_id)
                 logger.info(f"📤 File uploaded to SFTP: {sftp_file_path}")
             except Exception as e:
                 logger.warning(f"⚠️ SFTP upload failed, continuing without: {e}")
         
-        # Process document based on type
         logger.info(f"🔄 Processing {doctype} document...")
-        extracted_data, token_usage, errors = processor.process_document(file_content, file.filename, doctype)
+        all_pages_extracted_data, token_usage, errors = processor.process_document(file_content, file.filename, doctype)
         
         if errors:
             logger.warning(f"⚠️ Processing errors: {errors}")
-        
-        # Construct response in target format
+
+        page_wise_data = []
+        if all_pages_extracted_data:
+            for page_data in all_pages_extracted_data:
+                formatted_page = processor.convert_to_target_format(
+                    page_data, process_id, file.filename, sftp_file_path or f"local/{file.filename}", doctype
+                )
+                page_wise_data.append(formatted_page)
+
         response_data = {
             "processId": process_id,
             "filePath": sftp_file_path or f"local/{file.filename}",
             "fileDir": sftp_file_dir or "local",
             "document_type": doctype.value,
-            "page_cnt": 1,
-            "isSingleDoc": True,
-            "obj_Type": "SINGLE_DOC_OBJ",
+            "page_cnt": len(page_wise_data),
+            "isSingleDoc": len(page_wise_data) <= 1,
+            "obj_Type": "SINGLE_DOC_OBJ" if len(page_wise_data) <= 1 else "MULTI_DOC_OBJ",
             "fileType": file_type,
-            "pageWiseData": [],
+            "pageWiseData": page_wise_data,
             "lineTabulaData": [],
             "sftp_original_file": sftp_file_path or f"local/{file.filename}",
             "sftp_results_file": f"{sftp_file_path}_results.json" if sftp_file_path else f"local/{file.filename}_results.json"
         }
         
-        # Convert extracted data to target format
-        if extracted_data:
-            page_wise_data = processor.convert_to_target_format(
-                extracted_data, process_id, file.filename, sftp_file_path or f"local/{file.filename}", doctype
-            )
-            response_data["pageWiseData"] = [page_wise_data]
+        final_response = {"status_code": 200, "status": "Success", "data": response_data}
         
-        # Create final response
-        final_response = {
-            "status_code": 200,
-            "status": "Success",
-            "data": response_data
-        }
-        
-        # Upload JSON result to SFTP if available
         if processor.sftp_client:
             try:
-                sftp_result_path = processor.sftp_client.upload_json_result(
-                    final_response, process_id, file.filename
-                )
+                sftp_result_path = processor.sftp_client.upload_json_result(final_response, process_id, file.filename)
                 response_data["sftp_results_file"] = sftp_result_path
                 logger.info(f"📤 JSON result uploaded to SFTP: {sftp_result_path}")
             except Exception as e:
@@ -302,22 +279,15 @@ async def ocr_process_file(
         logger.info(f"✅ OCR processing completed successfully for {doctype}")
         logger.info(f"   - Token Usage: Input={token_usage.input_tokens}, Output={token_usage.output_tokens}, Cost=${token_usage.total_cost_usd:.4f}")
         
-        # Clean up temporary files
         processor.cleanup()
         
-        return JSONResponse(
-            status_code=200,
-            content=final_response
-        )
+        return JSONResponse(status_code=200, content=final_response)
         
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"❌ Unexpected error during OCR processing: {str(e)}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Internal server error: {str(e)}"
-        )
+        logger.error(f"❌ Unexpected error during OCR processing: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error: {str(e)}")
 
 @app.get("/health")
 async def health_check():

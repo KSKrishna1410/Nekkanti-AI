@@ -20,7 +20,7 @@ class NekkantiOCR:
         self.ocr = PaddleOCR(
             text_detection_model_name="PP-OCRv5_mobile_det",
             text_recognition_model_name="PP-OCRv5_mobile_rec",
-            use_doc_orientation_classify=False,
+            use_doc_orientation_classify=True,
             use_doc_unwarping=False,
             use_textline_orientation=False,
             device="cpu"
@@ -338,25 +338,84 @@ class NekkantiOCR:
     def ocr_reconstruct_and_extract_tables(self, input_path, save_to_excel=True):
         """
         Complete pipeline: OCR the input, reconstruct PDF with lines, and extract tables.
-        
+
         Args:
             input_path (str): Path to input image or PDF
             save_to_excel (bool): Whether to save extracted tables to Excel files
-            
+
         Returns:
             tuple: (ocr_data, pdf_path, extracted_tables)
         """
         print("🔄 Starting OCR and reconstruction...")
-        
+
         # Step 1: OCR and reconstruct PDF
         ocr_data, pdf_path = self.ocr_and_reconstruct(input_path)
-        
+
         print("🔍 Extracting tables from reconstructed PDF...")
-        
+
         # Step 2: Extract tables from the reconstructed PDF
         extracted_tables = self.extract_tables_from_pdf(pdf_path, save_to_excel)
-        
+
         return ocr_data, pdf_path, extracted_tables
+
+    def extract_text_with_page_info(self, ocr_results):
+        """
+        Extract text with page information from OCR results for better LLM context.
+
+        Args:
+            ocr_results (list): OCR results from ocr_and_reconstruct method
+
+        Returns:
+            str: Extracted text with page separators
+        """
+        if not ocr_results:
+            return ""
+
+        extracted_text_parts = []
+
+        for page_idx, page_result in enumerate(ocr_results):
+            if not page_result or 'rec_texts' not in page_result:
+                continue
+
+            rec_texts = page_result['rec_texts']
+
+            if not rec_texts:
+                continue
+
+            # Add page separator for multi-page documents
+            if page_idx > 0:
+                extracted_text_parts.append(f"\n=== PAGE {page_idx + 1} ===\n")
+
+            # Join all text from this page
+            page_text = " ".join(rec_texts)
+            extracted_text_parts.append(page_text)
+
+        return "".join(extracted_text_parts)
+
+    def extract_text_per_page(self, ocr_results):
+        """
+        Extract text per page from OCR results.
+
+        Args:
+            ocr_results (list): OCR results from ocr_and_reconstruct method
+
+        Returns:
+            list: A list of strings, where each string is the text of a page.
+        """
+        if not ocr_results:
+            return []
+
+        page_texts = []
+        for page_result in ocr_results:
+            if not page_result or 'rec_texts' not in page_result:
+                page_texts.append("")
+                continue
+
+            rec_texts = page_result['rec_texts']
+            page_text = " ".join(rec_texts)
+            page_texts.append(page_text)
+
+        return page_texts
 
 
 def is_readable_pdf(file_path):
@@ -407,4 +466,4 @@ if __name__ == "__main__":
             if 'excel_path' in table_info:
                 print(f"     - Excel file: {table_info['excel_path']}")
     else:
-        print("\n❌ No tables were extracted from the document") 
+        print("\n❌ No tables were extracted from the document")

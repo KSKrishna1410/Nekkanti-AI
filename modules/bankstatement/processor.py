@@ -16,7 +16,7 @@ sys.path.append(project_root)
 from bank_statements.extractors.header_extractor import BankStatementHeaderExtractor
 from bank_statements.extractors.table_extractor import BankStatementExtractor
 from utils.extraction.table_extractor import DocumentTableExtractor
-from ..utils.ai_provider import TokenUsage
+from modules.utils.ai_provider import TokenUsage
 
 logger = logging.getLogger(__name__)
 

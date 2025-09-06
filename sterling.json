@@ -1,0 +1,720 @@
+{
+  "status_code": 200,
+  "status": "Success",
+  "data": {
+    "processId": "877ce998-bb3c-4e70-af8d-08c88810d891",
+    "filePath": "local/5.1_15.01.2024 Sterling RISQ.pdf",
+    "fileDir": "local",
+    "document_type": "INVOICE",
+    "page_cnt": 1,
+    "isSingleDoc": true,
+    "obj_Type": "SINGLE_DOC_OBJ",
+    "fileType": "PDF",
+    "pageWiseData": [
+      {
+        "page": 1,
+        "identified_doc_type": "INVOICE",
+        "rawtext": "supplier_name: Sterling Information Resources India Pvt. Ltd. supplier_gstin: 27AAJCS9502P1ZN supplier_address: 302, Zenia Building, Hiranandani Business Park, Ghodbunder Road, Thane West Maharashtra 400 607 | Tel: 022-47782683. buyer_name: Nekkanti Systems Private Limited buyer_gstin: 36AACCN1440J1ZN buyer_address: 212B Road No. 10C,MLA & MP Colony, Jubilee Hills, Hyderabad 500033 invoice_number: IV/DM/232401156 invoice_date: 15-Jan-24 payment_terms: 30 days from the date of Invoice subtotal: 1,890.00 total_tax: 340.20 total_amount: 2,230.20 currency: Rupees sl_no: 1 item_no: 1 description: Verification job processed as per the Annexurer Attached item_description: Verification job processed as per the Annexurer Attached hsn_sac: 998311 sac_code: 998311 quantity: 1 qty: 1 rate: 1,890.00 price: 1,890.00 taxable_value: 1,890.00 taxable_amount: 1,890.00 igst_rate: 18% igst_amount: 340.20 tax_rate: 18% tax_amount: 340.20 total_amount: 2,230.20 amount: 1,890.00 line_total: 2,230.20 net_amount: 2,230.20",
+        "headerInfo": [
+          {
+            "key": "Supplier Name",
+            "value": "Sterling Information Resources India Pvt. Ltd.",
+            "key_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "value_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "method": "AI",
+            "doc_text": "Supplier Name",
+            "closest_distance": 0
+          },
+          {
+            "key": "GSTIN",
+            "value": "27AAJCS9502P1ZN",
+            "key_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "value_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "method": "AI",
+            "doc_text": "GSTIN",
+            "closest_distance": 0
+          },
+          {
+            "key": "Supplier Address",
+            "value": "302, Zenia Building, Hiranandani Business Park, Ghodbunder Road, Thane West Maharashtra 400 607 | Tel: 022-47782683.",
+            "key_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "value_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "method": "AI",
+            "doc_text": "Supplier Address",
+            "closest_distance": 0
+          },
+          {
+            "key": "Buyer Name",
+            "value": "Nekkanti Systems Private Limited",
+            "key_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "value_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "method": "AI",
+            "doc_text": "Buyer Name",
+            "closest_distance": 0
+          },
+          {
+            "key": "Buyer Gstin",
+            "value": "36AACCN1440J1ZN",
+            "key_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "value_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "method": "AI",
+            "doc_text": "Buyer Gstin",
+            "closest_distance": 0
+          },
+          {
+            "key": "Buyer Address",
+            "value": "212B Road No. 10C,MLA & MP Colony, Jubilee Hills, Hyderabad 500033",
+            "key_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "value_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "method": "AI",
+            "doc_text": "Buyer Address",
+            "closest_distance": 0
+          },
+          {
+            "key": "Invoice Number",
+            "value": "IV/DM/232401156",
+            "key_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "value_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "method": "AI",
+            "doc_text": "Invoice Number",
+            "closest_distance": 0
+          },
+          {
+            "key": "Invoice Date",
+            "value": "15-Jan-24",
+            "key_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "value_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "method": "AI",
+            "doc_text": "Invoice Date",
+            "closest_distance": 0
+          },
+          {
+            "key": "Payment Terms",
+            "value": "30 days from the date of Invoice",
+            "key_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "value_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "method": "AI",
+            "doc_text": "Payment Terms",
+            "closest_distance": 0
+          },
+          {
+            "key": "Net Amount",
+            "value": "1,890.00",
+            "key_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "value_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "method": "AI",
+            "doc_text": "Net Amount",
+            "closest_distance": 0
+          },
+          {
+            "key": "Total Tax",
+            "value": "340.20",
+            "key_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "value_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "method": "AI",
+            "doc_text": "Total Tax",
+            "closest_distance": 0
+          },
+          {
+            "key": "Invoice Total Amount",
+            "value": "2,230.20",
+            "key_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "value_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "method": "AI",
+            "doc_text": "Invoice Total Amount",
+            "closest_distance": 0
+          },
+          {
+            "key": "Currency",
+            "value": "Rupees",
+            "key_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "value_bbox": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "method": "AI",
+            "doc_text": "Currency",
+            "closest_distance": 0
+          }
+        ],
+        "paymentSts": "UNPAID",
+        "incl_Tax": false,
+        "lineInfo": {
+          "lineData": [
+            [
+              "#",
+              "Item & Description",
+              "HSN/SAC",
+              "Qty",
+              "Rate",
+              "Discount",
+              "CGST %",
+              "Amt",
+              "SGST %",
+              "Amt",
+              "Amount"
+            ],
+            [
+              "1",
+              "Verification job processed as per the Annexurer Attached",
+              "998311",
+              "1",
+              "1,890.00",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "2,230.20"
+            ]
+          ],
+          "tableInfo": [
+            {
+              "key": "#",
+              "position": 1,
+              "coordinates": [
+                0,
+                100
+              ]
+            },
+            {
+              "key": "Item & Description",
+              "position": 2,
+              "coordinates": [
+                100,
+                200
+              ]
+            },
+            {
+              "key": "HSN/SAC",
+              "position": 3,
+              "coordinates": [
+                200,
+                300
+              ]
+            },
+            {
+              "key": "Qty",
+              "position": 4,
+              "coordinates": [
+                300,
+                400
+              ]
+            },
+            {
+              "key": "Rate",
+              "position": 5,
+              "coordinates": [
+                400,
+                500
+              ]
+            },
+            {
+              "key": "Discount",
+              "position": 6,
+              "coordinates": [
+                500,
+                600
+              ]
+            },
+            {
+              "key": "CGST %",
+              "position": 7,
+              "coordinates": [
+                600,
+                700
+              ]
+            },
+            {
+              "key": "Amt",
+              "position": 8,
+              "coordinates": [
+                700,
+                800
+              ]
+            },
+            {
+              "key": "SGST %",
+              "position": 9,
+              "coordinates": [
+                800,
+                900
+              ]
+            },
+            {
+              "key": "Amt",
+              "position": 10,
+              "coordinates": [
+                900,
+                1000
+              ]
+            },
+            {
+              "key": "Amount",
+              "position": 11,
+              "coordinates": [
+                1000,
+                1100
+              ]
+            }
+          ],
+          "excludeLine": [],
+          "tablePosition": [
+            [
+              0,
+              800
+            ],
+            [
+              0,
+              1200
+            ]
+          ]
+        },
+        "pageWiseFilePath": "app/temp_uploads/877ce998-bb3c-4e70-af8d-08c88810d891/local_uploads/page1",
+        "pageWisedocPath": "app/temp_uploads/877ce998-bb3c-4e70-af8d-08c88810d891/local_uploads/page1/5.1_15.01.2024 Sterling RISQ.pdf"
+      }
+    ],
+    "lineTabulaData": [],
+    "sftp_original_file": "local/5.1_15.01.2024 Sterling RISQ.pdf",
+    "sftp_results_file": "local/5.1_15.01.2024 Sterling RISQ.pdf_results.json"
+  }
+}
