@@ -1,6 +1,5 @@
 .env
 *.pyc
 tmp*
-Dockerfile
 docker-compose.yml
 
