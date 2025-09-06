@@ -18,3 +18,11 @@ pillow==10.1.0
 reportlab==4.0.7
 pymupdf==1.23.8
 img2table==1.4.2
+
+# Additional dependencies for orientation correction
+pytesseract==0.3.10
+pdf2image==1.17.0
+opencv-python==4.8.1.78
+
+# Template engine for prompt management
+Jinja2==3.1.2

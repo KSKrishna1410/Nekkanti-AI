@@ -18,8 +18,15 @@ from pathlib import Path
 import multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from functools import partial
+import logging
+
+# Import orientation correction utilities
+from .orientation_corrector import correct_pdf_orientation, correct_image_orientation
 
 warnings.filterwarnings("ignore")
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 # Global OCR instance for multiprocessing
 global_ocr = None
@@ -302,26 +309,81 @@ class DocumentOCR:
             data.save(temp_path)
             
         return temp_path
+    
+    def apply_orientation_correction(self, input_path):
+        """Apply orientation correction to input document"""
+        try:
+            logger.info(f"🔄 Applying orientation correction to: {os.path.basename(input_path)}")
+            
+            # Create corrected file path
+            base_name = os.path.splitext(os.path.basename(input_path))[0]
+            
+            if self._is_pdf(input_path):
+                corrected_path = os.path.join(self.temp_pdfs_dir, f"{base_name}_corrected.pdf")
+                result_path = correct_pdf_orientation(input_path, corrected_path)
+            else:
+                # For image files
+                corrected_path = os.path.join(self.temp_images_dir, f"{base_name}_corrected.png")
+                result_path = correct_image_orientation(input_path, corrected_path)
+            
+            if result_path and os.path.exists(result_path):
+                logger.info(f"✅ Orientation correction completed: {os.path.basename(result_path)}")
+                return result_path
+            else:
+                logger.warning("⚠️ Orientation correction failed, using original file")
+                return input_path
+                
+        except Exception as e:
+            logger.warning(f"⚠️ Orientation correction failed: {e}, using original file")
+            return input_path
+    
+    def extract_text_with_page_info(self, ocr_data):
+        """Extract text from OCR data with page information"""
+        page_texts = []
+        
+        for page_idx, page_result in enumerate(ocr_data):
+            page_num = page_idx + 1
+            page_text = f"=== PAGE {page_num} ===\n"
+            
+            if not page_result:
+                page_text += "No text found on this page.\n"
+            else:
+                rec_texts = page_result.get("rec_texts", [])
+                if rec_texts:
+                    page_text += "\n".join(text for text in rec_texts if text and text.strip())
+                else:
+                    page_text += "No text found on this page.\n"
+            
+            page_texts.append(page_text)
+        
+        # Combine all pages with page separators
+        combined_text = "\n\n".join(page_texts)
+        logger.info(f"📄 Extracted text from {len(page_texts)} pages")
+        return combined_text
 
     def ocr_and_reconstruct(self, input_path):
-        """OCR and reconstruct a document using sequential processing"""
+        """OCR and reconstruct a document using sequential processing with orientation correction"""
         temp_image_paths = []
+        corrected_input_path = input_path
         
         try:
-            print(f"🔄 Starting OCR and reconstruction for: {os.path.basename(input_path)}")
+            logger.info(f"🔄 Starting OCR and reconstruction for: {os.path.basename(input_path)}")
             
-            # Check if input is PDF or image
-            if self._is_pdf(input_path):
-                print(f"📄 Converting PDF to images for OCR processing...")
-                temp_image_paths = self._pdf_to_images(input_path)
+            # Step 1: Apply orientation correction
+            corrected_input_path = self.apply_orientation_correction(input_path)
+            
+            # Step 2: Convert to images if needed
+            if self._is_pdf(corrected_input_path):
+                logger.info(f"📄 Converting PDF to images for OCR processing...")
+                temp_image_paths = self._pdf_to_images(corrected_input_path)
                 
                 if not temp_image_paths:
-                    raise ValueError(f"Could not convert PDF pages to images: {input_path}")
+                    raise ValueError(f"Could not convert PDF pages to images: {corrected_input_path}")
                 
                 primary_image_path = temp_image_paths[0]
             else:
-                primary_image_path = input_path
-                temp_image_paths = [input_path]
+                primary_image_path = corrected_input_path
+                temp_image_paths = [corrected_input_path]
             
             # Verify primary image exists and is readable
             if not os.path.exists(primary_image_path):

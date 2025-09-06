@@ -69,15 +69,8 @@ class DocumentProcessor:
             # Use OCR to extract text
             ocr_results, reconstructed_pdf_path = self.ocr_processor.ocr_and_reconstruct(temp_path)
             
-            # Extract text from OCR results
-            text_parts = []
-            for page_result in ocr_results:
-                if "rec_texts" in page_result:
-                    for text in page_result["rec_texts"]:
-                        if text and text.strip():
-                            text_parts.append(text.strip())
-            
-            extracted_text = "\n".join(text_parts)
+            # Extract text with page information for better LLM context
+            extracted_text = self.ocr_processor.extract_text_with_page_info(ocr_results)
             
             if not extracted_text.strip():
                 raise ValueError("No text could be extracted from the document")

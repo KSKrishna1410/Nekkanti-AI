@@ -9,6 +9,7 @@ from typing import Dict, Any, List, Tuple
 
 from ..utils.ai_provider import AIProviderClient, TokenUsage
 from ..utils.document_processor import DocumentProcessor
+from ...utils.prompt_manager import get_prompt_manager
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +18,7 @@ class InvoiceProcessor:
     def __init__(self):
         self.ai_client = AIProviderClient()
         self.document_processor = DocumentProcessor()
+        self.prompt_manager = get_prompt_manager()
     
     def process_invoice(self, file_content: bytes, filename: str) -> Tuple[Dict[str, Any], TokenUsage, List[str]]:
         """Process invoice document and extract structured data"""
@@ -34,7 +36,7 @@ class InvoiceProcessor:
                 errors.append("No text could be extracted from document")
                 return {}, token_usage, errors
             
-            # Create extraction prompt
+            # Create extraction prompt using template
             prompt = self._create_invoice_extraction_prompt(text)
             
             # Generate AI response
@@ -55,8 +57,14 @@ class InvoiceProcessor:
             # Post-process to ensure serial numbers are present
             extracted_data = self._ensure_serial_numbers(extracted_data)
             
-            # Post-process to validate and reconcile tax data
+            # Post-process to validate tax data (no corrections in strict mode)
             extracted_data = self._post_process_tax_data(extracted_data)
+            
+            # Check extraction completeness and add warnings to errors
+            completeness_warnings = self._check_extraction_completeness(extracted_data, text)
+            if completeness_warnings:
+                logger.warning(f"Extraction completeness warnings: {completeness_warnings}")
+                errors.extend([f"Completeness warning: {warning}" for warning in completeness_warnings])
             
             return extracted_data, token_usage, errors
                 
@@ -66,102 +74,30 @@ class InvoiceProcessor:
             return {}, token_usage, errors
     
     def _create_invoice_extraction_prompt(self, text: str) -> str:
-        """Create a detailed prompt for AI to extract structured invoice data"""
-        return f"""
-You are an expert invoice data extraction system. Extract structured information from the following invoice text and return it as valid JSON.
+        """Create a detailed prompt for AI to extract structured invoice data using template"""
+        try:
+            return self.prompt_manager.render_template('invoice_extraction.jinja', text=text)
+        except Exception as e:
+            logger.error(f"CRITICAL: Failed to load invoice extraction template: {e}")
+            # Strict fallback - no creativity allowed
+            return f"""
+FINANCIAL DOCUMENT EXTRACTION - STRICT MODE
 
-**IMPORTANT: Do not perform any calculations. Only return values that are explicitly present in the document. If a value is not present, return null.**
+RULES: 
+1. Extract ONLY what is explicitly written
+2. Do NOT calculate or infer anything
+3. Use null for missing fields
+4. Copy text exactly as written
 
-INVOICE TEXT:
+DOCUMENT TEXT:
 {text}
 
-Please extract the following information and return it as a JSON object with this exact structure:
-
-{{
-    "header_fields": {{
-        "supplier_name": "string or null",
-        "supplier_gstin": "string or null", 
-        "supplier_address": "string or null",
-        "buyer_name": "string or null",
-        "buyer_gstin": "string or null",
-        "buyer_address": "string or null",
-        "invoice_number": "string or null",
-        "invoice_date": "string or null",
-        "payment_terms": "string or null",
-        "subtotal": "string or null",
-        "total_tax": "string or null", 
-        "total_amount": "string or null",
-        "currency": "string or null",
-        "due_date": "string or null",
-        "po_number": "string or null"
-    }},
-    "invoice_table": [
-        {{
-            "sl_no": "string or null",
-            "serial_number": "string or null",
-            "item_no": "string or null",
-            "description": "string or null",
-            "item_description": "string or null", 
-            "product_name": "string or null",
-            "hsn_sac": "string or null",
-            "hsn_code": "string or null",
-            "sac_code": "string or null",
-            "quantity": "string or null",
-            "qty": "string or null",
-            "unit": "string or null",
-            "uom": "string or null",
-            "rate": "string or null",
-            "unit_price": "string or null",
-            "price": "string or null",
-            "discount": "string or null",
-            "discount_amount": "string or null",
-            "taxable_value": "string or null",
-            "taxable_amount": "string or null",
-            "cgst_rate": "string or null",
-            "cgst_amount": "string or null",
-            "sgst_rate": "string or null",
-            "sgst_amount": "string or null", 
-            "igst_rate": "string or null",
-            "igst_amount": "string or null",
-            "gst_rate": "string or null",
-            "gst_amount": "string or null",
-            "tax_rate": "string or null",
-            "tax_amount": "string or null",
-            "total_amount": "string or null",
-            "amount": "string or null",
-            "line_total": "string or null",
-            "net_amount": "string or null"
-        }}
-    ]
-}}
-
-INSTRUCTIONS:
-1. Extract ALL line items from the invoice table/items section
-2. CRITICAL: Always look for and extract serial numbers from columns like: S.No, Sl.No, Serial No, Item No, #, Row Number, Line Number, etc.
-3. CRITICAL: If there is an Item Description without a specific header, include it in the "description" or "item_description" field
-4. CRITICAL: Look for item descriptions that appear in table rows even if they don't have clear column headers
-5. CRITICAL: Include any text that describes products/services/items, even if it's not clearly labeled as a description
-6. If you find a column with sequential numbers (1, 2, 3...) at the start of each row, that's the serial number - extract it as "sl_no"
-7. For header fields, look for: supplier info, buyer info, invoice details, amounts
-8. For table data, preserve original column names and extract ALL available fields
-9. Include multiple variations of the same field (e.g., both "quantity" and "qty" if present)
-10. Use null for any fields not found in the invoice
-11. Keep numeric values as strings to preserve formatting
-12. If no explicit serial numbers exist in the invoice, generate sequential numbers (1, 2, 3...) for "sl_no" field
-13. Pay special attention to: serial numbers, item descriptions, quantities, rates, taxes, totals
-14. Return only valid JSON, no additional text or explanations
-
-**INDIAN GST EXTRACTION RULES:**
-- **IGST vs. CGST/SGST:**
-  - If you see "IGST" mentioned, extract it. IGST is for inter-state sales.
-  - If you see "CGST" and "SGST" mentioned, extract them. CGST and SGST are for intra-state sales.
-  - **CRITICAL RULE:** An invoice will have EITHER IGST OR a combination of CGST and SGST. They are mutually exclusive. If you find any value for IGST, you MUST set CGST and SGST values to null. If you find values for CGST and SGST, you MUST set IGST to null. Prioritize extracting the tax type that has explicit non-zero amounts listed.
-- **Generic Tax:** If you only see a generic "Tax" or "GST" field without specifying the type, try to infer it. If buyer and seller are in different states (if visible), it's likely IGST. If they are in the same state, it's CGST/SGST. If you cannot determine the type, extract the value into `gst_amount` and `gst_rate`.
-- **Header vs. Line Items:** Extract taxes from both the header (e.g., "Total IGST") and from each line item in the table.
+Return JSON with exact structure: {{"header_fields": {{}}, "invoice_table": []}}
 """
+    
 
     def _ensure_serial_numbers(self, extracted_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Ensure serial numbers are present in invoice table data"""
+        """Check for serial numbers but do NOT generate them - strict mode"""
         if not extracted_data or 'invoice_table' not in extracted_data:
             return extracted_data
         
@@ -169,27 +105,26 @@ INSTRUCTIONS:
         if not invoice_table:
             return extracted_data
         
-        # Check if serial numbers already exist
+        # In strict mode, we only validate but do NOT generate serial numbers
+        # The LLM should extract only what exists in the document
         serial_fields = ['sl_no', 'serial_number', 'item_no', 's_no', 'serial']
         has_serials = any(
             any(str(item.get(field, '')).strip() for field in serial_fields)
             for item in invoice_table
         )
         
-        # If no serial numbers found, generate them
         if not has_serials:
-            for i, item in enumerate(invoice_table, 1):
-                item['sl_no'] = str(i)
+            logger.info("No serial numbers found in extracted data - this is acceptable in strict mode")
         
         return extracted_data
 
     def _post_process_tax_data(self, extracted_data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Validates and reconciles GST data (IGST, CGST, SGST) in the extracted invoice.
+        Validates GST data (IGST, CGST, SGST) in STRICT mode.
         - Enforces mutual exclusivity of IGST and CGST/SGST.
-        - Verifies and corrects tax amounts against rates and taxable value.
+        - Does NOT perform calculations or corrections - only validates consistency.
         """
-        logger.info("Running tax post-processing and verification...")
+        logger.info("Running strict tax validation (no calculations)...")
 
         def _safe_float(value: Any) -> float:
             """Safely convert a value to a float, returning 0.0 on failure."""
@@ -226,28 +161,25 @@ INSTRUCTIONS:
                 item['cgst_rate'] = None
                 item['sgst_rate'] = None
 
-            # --- Rule 2: Verification and Correction ---
+            # --- Rule 2: STRICT MODE - No Calculations, Only Validation ---
             if taxable_value > 0:
-                # Verify IGST
+                # Validate IGST (log inconsistencies but do NOT correct)
                 if igst_rate > 0:
                     expected_igst = round(taxable_value * (igst_rate / 100), 2)
                     if abs(expected_igst - igst_amount) > 0.1: # Tolerance for rounding
-                        logger.warning(f"Correcting IGST amount. Extracted: {igst_amount}, Calculated: {expected_igst}")
-                        item['igst_amount'] = f"{expected_igst:.2f}"
+                        logger.warning(f"IGST calculation inconsistency detected but NOT corrected. Document shows: {igst_amount}, Expected: {expected_igst}")
                 
-                # Verify CGST
+                # Validate CGST (log inconsistencies but do NOT correct)
                 if cgst_rate > 0:
                     expected_cgst = round(taxable_value * (cgst_rate / 100), 2)
                     if abs(expected_cgst - cgst_amount) > 0.1:
-                        logger.warning(f"Correcting CGST amount. Extracted: {cgst_amount}, Calculated: {expected_cgst}")
-                        item['cgst_amount'] = f"{expected_cgst:.2f}"
+                        logger.warning(f"CGST calculation inconsistency detected but NOT corrected. Document shows: {cgst_amount}, Expected: {expected_cgst}")
 
-                # Verify SGST
+                # Validate SGST (log inconsistencies but do NOT correct)
                 if sgst_rate > 0:
                     expected_sgst = round(taxable_value * (sgst_rate / 100), 2)
                     if abs(expected_sgst - sgst_amount) > 0.1:
-                        logger.warning(f"Correcting SGST amount. Extracted: {sgst_amount}, Calculated: {expected_sgst}")
-                        item['sgst_amount'] = f"{expected_sgst:.2f}"
+                        logger.warning(f"SGST calculation inconsistency detected but NOT corrected. Document shows: {sgst_amount}, Expected: {expected_sgst}")
 
         # Process header fields
         if 'header_fields' in extracted_data:
@@ -258,8 +190,60 @@ INSTRUCTIONS:
             for line_item in extracted_data['invoice_table']:
                 _process_item(line_item)
 
-        logger.info("Tax post-processing and verification complete.")
+        logger.info("Strict tax validation complete.")
         return extracted_data
+    
+    def _check_extraction_completeness(self, extracted_data: Dict[str, Any], original_text: str) -> List[str]:
+        """Check for potential missing data in extracted information"""
+        warnings = []
+        
+        # Count pages in original text
+        page_count = original_text.count("=== PAGE")
+        if page_count == 0:
+            page_count = 1  # Single page document
+        
+        # Check if we processed all pages
+        invoice_table = extracted_data.get('invoice_table', [])
+        if invoice_table:
+            pages_with_items = set()
+            for item in invoice_table:
+                if 'page_number' in item and item['page_number']:
+                    try:
+                        pages_with_items.add(int(str(item['page_number']).strip()))
+                    except:
+                        pass
+            
+            if len(pages_with_items) < page_count:
+                warnings.append(f"Extracted items from {len(pages_with_items)} pages but document has {page_count} pages")
+        
+        # Check for common missing header fields
+        header_fields = extracted_data.get('header_fields', {})
+        critical_fields = ['invoice_number', 'invoice_date', 'supplier_name', 'total_amount']
+        missing_critical = [field for field in critical_fields if not header_fields.get(field)]
+        
+        if missing_critical:
+            warnings.append(f"Missing critical header fields: {', '.join(missing_critical)}")
+        
+        # Check for empty line items when text contains table patterns
+        table_indicators = ['sl.no', 'sr.no', 'item', 'description', 'qty', 'rate', 'amount', 'total']
+        has_table_pattern = any(indicator in original_text.lower() for indicator in table_indicators)
+        
+        if has_table_pattern and not invoice_table:
+            warnings.append("Document appears to contain table data but no line items were extracted")
+        
+        # Check for incomplete line items
+        if invoice_table:
+            incomplete_items = 0
+            for item in invoice_table:
+                essential_fields = ['description', 'quantity', 'rate', 'total_amount']
+                missing_fields = sum(1 for field in essential_fields if not item.get(field))
+                if missing_fields >= 3:  # More than half missing
+                    incomplete_items += 1
+            
+            if incomplete_items > 0:
+                warnings.append(f"{incomplete_items} line items appear incomplete (missing essential data)")
+        
+        return warnings
     
     def convert_to_target_format(self, extracted_data: Dict[str, Any], process_id: str, filename: str, file_path: str) -> Dict[str, Any]:
         """Convert extracted data to target JSON format"""
@@ -314,8 +298,8 @@ INSTRUCTIONS:
         table_info = []
         
         if invoice_table:
-            # Create header row
-            headers = ["#", "Item & Description", "HSN /SAC", "Qty", "Rate", "CGST %", "Amt", "SGST %", "Amt", "Amount"]
+            # Create header row - include discount column
+            headers = ["#", "Item & Description", "HSN/SAC", "Qty", "Rate", "Discount", "CGST %", "Amt", "SGST %", "Amt", "Amount"]
             line_data.append(headers)
             
             # Create table info
@@ -326,14 +310,22 @@ INSTRUCTIONS:
                     "coordinates": [i * 100, (i + 1) * 100]
                 })
             
-            # Add data rows
+            # Add data rows - include discount column
             for idx, item in enumerate(invoice_table, 1):
+                # Extract discount from various possible field names
+                discount_value = (item.get('discount') or 
+                                item.get('discount_amount') or 
+                                item.get('discount_percent') or 
+                                item.get('disc') or 
+                                item.get('disc_amt') or '')
+                
                 row = [
                     str(idx),
                     item.get('description') or item.get('item_description') or item.get('product_name') or '',
                     item.get('hsn_sac') or item.get('hsn_code') or item.get('sac_code') or '',
                     item.get('quantity') or item.get('qty') or '',
                     item.get('rate') or item.get('unit_price') or item.get('price') or '',
+                    discount_value,  # Add discount column
                     item.get('cgst_rate') or item.get('gst_rate') or '',
                     item.get('cgst_amount') or item.get('gst_amount') or '',
                     item.get('sgst_rate') or item.get('gst_rate') or '',
