@@ -55,7 +55,7 @@ class AIProviderClient:
                     {"role": "system", "content": "You are an expert document data extraction system. Extract structured information and return only valid JSON."},
                     {"role": "user", "content": prompt}
                 ],
-                temperature=0.1,
+                temperature=0,
                 max_tokens=8192
             )
             

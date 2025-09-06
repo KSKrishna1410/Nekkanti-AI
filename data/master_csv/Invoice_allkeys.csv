@@ -52,10 +52,7 @@ IGST Tax Amount,IGST5.0,Double,Header
 IGST Tax Amount,Taxes: IGST @ 18%,Double,Header
 IGST Tax Amount,IGST Amount,Double,Header
 IGST Tax Amount,IGST Rate Amount,Double,Header
-IGST Tax Amount,@12%,Double,Header
 IGST Tax Amount,IGST @ 18%,Double,Header
-IGST Tax Amount,Total Tax Amount,Double,Header
-IGST Tax Amount,"12%",Double,Header
 IGST Tax Amount,IGST,Double,Header
 IGST Tax Rate,IGST OUTPUT @ 18%,Double,Header
 IGST Tax Rate,GST %,Double,Header
